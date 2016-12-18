@@ -1,6 +1,4 @@
-/**
- * Root Component
- */
+/* Root Component */
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
@@ -9,8 +7,10 @@ import IntlWrapper from './modules/Intl/IntlWrapper';
 // Import Routes
 import routes from './routes';
 
+import 'bootstrap/dist/css/bootstrap-flex.css';
+
 // Base stylesheet
-require('./main.css');
+require('./css/style.css');
 
 export default function App(props) {
   return (
