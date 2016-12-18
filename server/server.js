@@ -39,6 +39,13 @@ import serverConfig from './config';
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
 
+const db = mongoose.connection;
+
+// db.on('error', console.error);
+db.once('open', () => {
+  dummyData();
+});
+
 // MongoDB Connection
 mongoose.connect(serverConfig.mongoURL, (error) => {
   if (error) {
@@ -47,7 +54,7 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
   }
 
   // feed some dummy data in DB.
-  dummyData();
+  // dummyData();
 });
 
 // Apply body Parser and server public assets and routes
