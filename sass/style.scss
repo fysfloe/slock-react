@@ -1,0 +1,314 @@
+@import "_variables";
+
+a {
+  color: $main-dark;
+}
+
+body, html {
+  text-align: center;
+  background: $main-color;
+}
+
+header {
+  padding: 2em;
+
+  h1 {
+    display: inline-block;
+    border-bottom: 0.1em solid $main-dark;
+    padding-bottom: 0.2em;
+
+    a {
+      &:hover, &:focus {
+        cursor: pointer;
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .choose-minute-mode {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+
+    #choose-minute-mode {
+      background: inherit;
+      border: 1px solid $main-dark;
+      display: inline-block;
+      color: $main-dark;
+      width: auto;
+    }
+  }
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-default {
+  background: darken($main-color, 10);
+  color: $main-dark;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:active {
+    background: darken($main-color, 15);
+  }
+}
+
+#own-time-input {
+  margin-bottom: 4em;
+}
+
+.time-input {
+  font-size: 2em;
+  border: none;
+  background: lighten($main-color, 20);
+  border-bottom: 0.1em solid $main-dark;
+  text-align: center;
+  color: $main-dark;
+  padding: 0 0.3em;
+
+  & + span {
+    font-size: 2em;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+#learn-content {
+  /*display: none;*/
+  margin: 1em .5em;
+  padding: 1em;
+  background: lighten($main-color, 30);
+  box-shadow: $main-shadow;
+
+  a.single-step-next, a.single-step-previous {
+    display: block;
+  }
+
+  a.single-step-next:after, a.single-step-previous:before {
+    display: inline-block;
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: .4em solid transparent;
+    border-bottom: .4em solid transparent;
+  }
+
+  a.single-step-next:after {
+    border-left: .5em solid $main-dark;
+    margin-left: .2em;
+  }
+
+  a.single-step-previous:before {
+    border-right: .5em solid $main-dark;
+    margin-right: .2em;
+  }
+
+  .clock-image {
+    .clock-time {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 0.5em 0;
+
+      > span {
+        padding: 0.5em 0;
+        width: 2.5em;
+        display: inline-block;
+        background: white;
+        margin: 0 0.2em;
+        color: $main-dark;
+      }
+    }
+
+    svg {
+      max-width: 100%;
+      width: 400px;
+      height: 400px;
+      transition: opacity 1s ease;
+
+      &.hide-clock-hands {
+        .clock-hand {
+          opacity: 0;
+        }
+      }
+
+      .clock-hand {
+        transform: rotateZ(0);
+        transform-origin: bottom;
+
+        transition: transform 1s ease;
+      }
+    }
+  }
+
+  .guess {
+    > div {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    &.minute-mode-minutes {
+      select#quarters {
+        display: none;
+      }
+    }
+
+    &.minute-mode-quarters {
+      input#minutes {
+        display: none;
+      }
+    }
+
+    button#guess {
+      transition: background-color 0.3s linear;
+      margin-top: 1em;
+
+      svg {
+        width: 1.5em;
+        position: absolute;
+        top: 1.45em;
+        right: 1.5em;
+
+        .circ {
+          opacity: 0;
+          stroke-dasharray: 130;
+          stroke-dashoffset: 130;
+          -webkit-transition: all 1s;
+          -moz-transition: all 1s;
+          -ms-transition: all 1s;
+          -o-transition: all 1s;
+          transition: all 1s;
+        }
+      }
+
+      .tick, .cross {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+        -webkit-transition: stroke-dashoffset 1s 0.5s ease-out;
+        -moz-transition: stroke-dashoffset 1s 0.5s ease-out;
+        -ms-transition: stroke-dashoffset 1s 0.5s ease-out;
+        -o-transition: stroke-dashoffset 1s 0.5s ease-out;
+        transition: stroke-dashoffset 1s 0.5s ease-out;
+      }
+
+      &.btn-success {
+        &:focus {
+          background-color: $success-color;
+          border-color: $success-color;
+          color: white;
+          box-shadow: none;
+        }
+
+        .circ, .tick {
+          opacity: 1;
+          stroke-dashoffset: 0;
+        }
+      }
+
+      &.btn-danger {
+        &:focus {
+          background-color: $danger-color;
+          border-color: $danger-color;
+          color: white;
+          box-shadow: none;
+        }
+
+        .circ, .cross {
+          opacity: 1;
+          stroke-dashoffset: 0;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .stats {
+    ul {
+      padding: 0;
+      list-style: none;
+
+      .single-step {
+        height: 3em;
+
+        a {
+          display: block;
+          width: 100%;
+          line-height: 3em;
+          background: white;
+          border-bottom: 0.3em solid;
+
+          transition: background 0.3s ease;
+
+          &:hover {
+            background: $main-color;
+            text-decoration: none;
+          }
+
+          &.correct {
+            border-color: $success-color;
+          }
+
+          &.not-correct {
+            border-color: $danger-color;
+          }
+
+          &.not-finished {
+            border-color: $main-dark;
+          }
+        }
+      }
+    }
+  }
+}
+
+ul.learn-steps {
+  padding: 0;
+  list-style: none;
+
+  li.learn-step-item {
+    box-shadow: $main-shadow;
+    background: white;
+    margin: 0 .5em;
+    padding: 0;
+
+    a {
+      display: block;
+      min-height: 12em;
+      padding: 1em;
+      position: relative;
+
+      &:hover,
+      &:active,
+      &:focus {
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 0 3px darken($main-color, 20) inset;
+      }
+
+      .bottom {
+        position: absolute;
+        bottom: 2em;
+        width: 80%;
+        left: 10%;
+      }
+    }
+  }
+}
