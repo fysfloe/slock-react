@@ -1,56 +1,67 @@
 import React, { Component } from 'react'
+import GuessInput from './GuessInput'
 import GuessButton from './GuessButton'
 import CorrectTime from './CorrectTime'
 import { Link } from 'react-router'
+import { getQuarters } from './Helpers'
+import { getMinutes } from './Helpers'
 
-export default class ClockImage extends Component {
+export default class Guess extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+
     this.state = {
       hourValue: props.guessed.hour || '',
       minutesValue: props.guessed.minutes || '',
+      quartersValue: props.guessed.minutes ? getQuarters(props.guessed.minutes) : 4,
     }
+
   }
 
-  getQuarters(minutes) {
-    if(minutes < 15) {
-      return 4
-    } else if(minutes < 30) {
-      return 1
-    } else if(minutes < 45) {
-      return 2
-    } else {
-      return 3
-    }
+  componentDidMount() {
+
   }
 
   guessHandler() {
-    let guessHour = this.refs.hour.value
-    if(guessHour == 0) {
+    let guessHour = this.state.hourValue
+    let guessQuarters = this.state.quartersValue
+    let guessMinutes = this.state.minutesValue
+
+    console.log("guessHour", guessHour);
+    console.log("guessMinutes", guessMinutes);
+
+
+    if(guessHour == 0 && guessHour !== '') {
       guessHour = 12
     }
 
-    let guessQuarters = this.refs.quarters.value
-    let guessMinutes = this.refs.minutes.value
-
-    let hour = this.props.time.hour
-    if(hour > 12) {
-      hour -= 12
+    if(guessHour === '' || isNaN(guessHour)) {
+      $(this.refs.error_no_input).fadeIn()
+      return
     }
 
+    if(
+      (this.props.minuteMode === 'minutes' && (guessMinutes === '' || isNaN(guessMinutes)))
+      ||
+      (this.props.minuteMode === 'quarters' && (guessQuarters === '' || isNaN(guessQuarters)))
+    ) {
+      $(this.refs.error_no_input).fadeIn()
+      return
+    }
+
+    $(this.refs.error_no_input).hide()
+
+    let hour = this.props.time.hour > 12 ? this.props.time.hour - 12 : this.props.time.hour
     let minutes = this.props.time.minutes
-    let quarters = this.getQuarters(minutes)
-    let displayQuarters = [
-      "15", "30", "45", "00",
-    ]
+    let quarters = getQuarters(minutes)
 
     let $correct_time = $(this.refs.correct_time)
 
     if(this.props.minuteMode === 'quarters') {
       if(guessHour == hour && guessQuarters == quarters) {
-        this.props.onGuess(true, {hour: guessHour, quarters: guessQuarters})
+        this.props.onGuess(true, {hour: guessHour, minutes: getMinutes(guessQuarters)})
       } else {
-        this.props.onGuess(false, {hour: guessHour, quarters: guessQuarters})
+        this.props.onGuess(false, {hour: guessHour, minutes: getMinutes(guessQuarters)})
       }
     } else if(this.props.minuteMode === 'minutes') {
       if(guessHour == hour && guessMinutes == minutes) {
@@ -61,40 +72,42 @@ export default class ClockImage extends Component {
     }
   }
 
-  handleInputChange() {
+  handleInputChange(hourValue, minutesValue, quartersValue) {
     this.setState({
-      hourValue: this.refs.hour.value,
-      minutesValue: this.refs.minutes.value,
+      hourValue: hourValue,
+      minutesValue: minutesValue,
+      quartersValue: quartersValue,
     })
   }
 
   render() {
-    let yourGuess = ''
-
-    if(this.props.finished) {
-      yourGuess = `Your Guess: ${this.props.guessed.hour}:${this.props.guessed.minutes}`
-    }
-
     let col = this.props.difficulty > 0 ? 'col-4' : 'col'
 
     return (
       <div className={`${col} guess minute-mode-${this.props.minuteMode}`}>
         <h3>Your Guess:</h3>
         <form onSubmit={this.guessHandler.bind(this)}>
-          <div>
-            <input type="number" min="1" max="12" step="1" name="hour" id="hour" ref="hour" className="time-input" onChange={this.handleInputChange.bind(this)} value={this.state.hourValue} />
-            <span>:</span>
-            <select className="time-input" id="quarters" name="quarters" ref="quarters">
-              <option value="4">00</option>
-              <option value="1">15</option>
-              <option value="2">30</option>
-              <option value="3">45</option>
-            </select>
-            <input type="number" className="time-input" min="1" max="59" name="minutes" id="minutes" ref="minutes" onChange={this.handleInputChange.bind(this)} value={this.state.minutesValue} />
-          </div>
-          <GuessButton onGuess={this.guessHandler.bind(this)} finished={this.props.finished} correct={this.props.correct} />
-          <CorrectTime finished={this.props.finished} correct={this.props.correct} time={this.props.time} />
-          <div className="your-guess">{yourGuess}</div>
+          <GuessInput
+            minuteMode={this.props.minuteMode}
+            finished={this.props.finished}
+            step={this.props.step}
+            time={this.props.time}
+            difficulty={this.props.difficulty}
+            guessed={this.props.guessed}
+            onInputChange={this.handleInputChange.bind(this)}
+          />
+          <span ref="error_no_input" className="error-no-input">Well, you should at least fill something in...</span>
+          <GuessButton
+            onGuess={this.guessHandler.bind(this)}
+            finished={this.props.finished}
+            correct={this.props.correct}
+          />
+          <CorrectTime
+            finished={this.props.finished}
+            correct={this.props.correct}
+            time={this.props.time}
+            minuteMode={this.props.minuteMode}
+          />
         </form>
       </div>
     )

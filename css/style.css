@@ -5,12 +5,17 @@ body, html {
   text-align: center;
   background: #F1D130; }
 
+input, select, button {
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+
 header {
   padding: 2em; }
   header h1 {
+    font-family: "Kaushan Script", cursive;
     display: inline-block;
     border-bottom: 0.1em solid #685807;
-    padding-bottom: 0.2em; }
+    padding-bottom: 0.2em;
+    font-size: 3rem; }
     header h1 a:hover, header h1 a:focus {
       cursor: pointer;
       color: inherit;
@@ -24,7 +29,8 @@ header {
       border: 1px solid #685807;
       display: inline-block;
       color: #685807;
-      width: auto; }
+      width: auto;
+      margin-left: 0.5em; }
 
 h2 {
   font-size: 1.5em; }
@@ -40,21 +46,35 @@ h3 {
   color: #685807;
   transition: all 0.3s ease; }
   .btn-default:hover, .btn-default:active {
+    color: black;
     background: #c7a80d; }
 
-#own-time-input {
+.btn-group .btn-default {
+  border: 1px solid #F1D130; }
+
+#own-input {
   margin-bottom: 4em; }
+  #own-input button#play-current-time {
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    font-family: "Kaushan Script", cursive; }
 
 .time-input {
   font-size: 2em;
+  width: 2em;
   border: none;
-  background: #f7e690;
+  background: white;
   border-bottom: 0.1em solid #685807;
   text-align: center;
   color: #685807;
   padding: 0 0.3em; }
   .time-input + span {
     font-size: 2em; }
+
+select.time-input {
+  padding: 0 0.4em;
+  -webkit-appearance: none;
+  border-radius: 0; }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -63,12 +83,21 @@ input::-webkit-inner-spin-button {
   margin: 0;
   /* <-- Apparently some margin are still there even though it's hidden */ }
 
+input[disabled] {
+  opacity: 0.8; }
+
 #learn-content {
   /*display: none;*/
   margin: 1em .5em;
   padding: 1em;
   background: #fbf1bf;
   box-shadow: 0 0 1px #af940c; }
+  #learn-content h2 {
+    margin: 0.5em 0 1em; }
+  #learn-content .start-button {
+    width: 100%;
+    font-size: 1.5em;
+    font-family: "Kaushan Script", cursive; }
   #learn-content a.single-step-next, #learn-content a.single-step-previous {
     display: block; }
   #learn-content a.single-step-next:after, #learn-content a.single-step-previous:before {
@@ -78,12 +107,33 @@ input::-webkit-inner-spin-button {
     height: 0;
     border-top: .4em solid transparent;
     border-bottom: .4em solid transparent; }
+  #learn-content a.single-step-next.link-disabled {
+    pointer-events: none; }
+    #learn-content a.single-step-next.link-disabled:after {
+      opacity: 0.3; }
   #learn-content a.single-step-next:after {
     border-left: 0.5em solid #685807;
     margin-left: .2em; }
   #learn-content a.single-step-previous:before {
     border-right: 0.5em solid #685807;
     margin-right: .2em; }
+  #learn-content .learn-step-description select#select-higher-hour, #learn-content .learn-step-description select#select-hour, #learn-content .learn-step-description input#select-minutes {
+    display: inline-block;
+    width: auto;
+    margin-right: 1em;
+    text-align: center; }
+    #learn-content .learn-step-description select#select-higher-hour + .btn-default, #learn-content .learn-step-description select#select-hour + .btn-default, #learn-content .learn-step-description input#select-minutes + .btn-default {
+      margin-top: -0.1em; }
+  #learn-content .learn-step-description .minute-description, #learn-content .learn-step-description .hour-description {
+    padding: 1em;
+    margin-bottom: 1em; }
+  #learn-content .learn-step-description .minute-description {
+    border-right: 0.3em solid #685807; }
+    #learn-content .learn-step-description .minute-description > ul {
+      list-style: none;
+      padding: 0; }
+    #learn-content .learn-step-description .minute-description .btn-group-vertical {
+      margin-bottom: 1em; }
   #learn-content .clock-image .clock-time {
     font-size: 1.5em;
     font-weight: bold;
@@ -109,6 +159,8 @@ input::-webkit-inner-spin-button {
   #learn-content .guess > div {
     text-align: center;
     margin-bottom: 1em; }
+  #learn-content .guess .error-no-input {
+    display: none; }
   #learn-content .guess.minute-mode-minutes select#quarters {
     display: none; }
   #learn-content .guess.minute-mode-quarters input#minutes {
@@ -158,7 +210,8 @@ input::-webkit-inner-spin-button {
       opacity: 0.8; }
   #learn-content .stats ul {
     padding: 0;
-    list-style: none; }
+    list-style: none;
+    margin: 1.5em 0; }
     #learn-content .stats ul .single-step {
       height: 3em; }
       #learn-content .stats ul .single-step a {
@@ -177,6 +230,12 @@ input::-webkit-inner-spin-button {
           border-color: #d9534f; }
         #learn-content .stats ul .single-step a.not-finished {
           border-color: #685807; }
+    #learn-content .stats ul + p {
+      font-weight: bold; }
+  #learn-content .stats > div {
+    margin: 1em 0 2em; }
+    #learn-content .stats > div .congrats {
+      font-style: italic; }
 
 ul.learn-steps {
   padding: 0;

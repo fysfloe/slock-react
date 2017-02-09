@@ -9,13 +9,19 @@ body, html {
   background: $main-color;
 }
 
+input, select, button {
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
 header {
   padding: 2em;
 
   h1 {
+    font-family: "Kaushan Script", cursive;
     display: inline-block;
     border-bottom: 0.1em solid $main-dark;
     padding-bottom: 0.2em;
+    font-size: 3rem;
 
     a {
       &:hover, &:focus {
@@ -37,6 +43,7 @@ header {
       display: inline-block;
       color: $main-dark;
       width: auto;
+      margin-left: 0.5em;
     }
   }
 }
@@ -60,18 +67,31 @@ h3 {
 
   &:hover,
   &:active {
+    color: black;
     background: darken($main-color, 15);
   }
 }
 
-#own-time-input {
+.btn-group .btn-default {
+  border: 1px solid $main-color;
+}
+
+#own-input {
   margin-bottom: 4em;
+
+  button#play-current-time {
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    font-family: "Kaushan Script", cursive;
+
+  }
 }
 
 .time-input {
   font-size: 2em;
+  width: 2em;
   border: none;
-  background: lighten($main-color, 20);
+  background: white;
   border-bottom: 0.1em solid $main-dark;
   text-align: center;
   color: $main-dark;
@@ -82,11 +102,21 @@ h3 {
   }
 }
 
+select.time-input {
+  padding: 0 0.4em;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   /* display: none; <- Crashes Chrome on hover */
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[disabled] {
+    opacity: 0.8;
 }
 
 #learn-content {
@@ -95,6 +125,16 @@ input::-webkit-inner-spin-button {
   padding: 1em;
   background: lighten($main-color, 30);
   box-shadow: $main-shadow;
+
+  h2 {
+    margin: 0.5em 0 1em;
+  }
+
+  .start-button {
+    width: 100%;
+    font-size: 1.5em;
+    font-family: "Kaushan Script", cursive;
+  }
 
   a.single-step-next, a.single-step-previous {
     display: block;
@@ -109,14 +149,54 @@ input::-webkit-inner-spin-button {
     border-bottom: .4em solid transparent;
   }
 
-  a.single-step-next:after {
-    border-left: .5em solid $main-dark;
-    margin-left: .2em;
+  a.single-step-next {
+    &.link-disabled {
+      pointer-events: none;
+
+      &:after {
+        opacity: 0.3;
+      }
+    }
+    &:after {
+      border-left: .5em solid $main-dark;
+      margin-left: .2em;
+    }
   }
 
   a.single-step-previous:before {
     border-right: .5em solid $main-dark;
     margin-right: .2em;
+  }
+
+  .learn-step-description {
+    select#select-higher-hour, select#select-hour, input#select-minutes {
+      display: inline-block;
+      width: auto;
+      margin-right: 1em;
+      text-align: center;
+
+      + .btn-default {
+        margin-top: -0.1em;
+      }
+    }
+
+    .minute-description, .hour-description {
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+
+    .minute-description {
+      border-right: 0.3em solid $main-dark;
+
+      > ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .btn-group-vertical {
+        margin-bottom: 1em;
+      }
+    }
   }
 
   .clock-image {
@@ -160,6 +240,10 @@ input::-webkit-inner-spin-button {
     > div {
       text-align: center;
       margin-bottom: 1em;
+    }
+
+    .error-no-input {
+      display: none;
     }
 
     &.minute-mode-minutes {
@@ -244,6 +328,7 @@ input::-webkit-inner-spin-button {
     ul {
       padding: 0;
       list-style: none;
+      margin: 1.5em 0;
 
       .single-step {
         height: 3em;
@@ -274,6 +359,18 @@ input::-webkit-inner-spin-button {
             border-color: $main-dark;
           }
         }
+      }
+
+      + p {
+        font-weight: bold;
+      }
+    }
+
+    > div {
+      margin: 1em 0 2em;
+
+      .congrats {
+        font-style: italic;
       }
     }
   }

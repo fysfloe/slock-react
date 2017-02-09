@@ -2,78 +2,92 @@ import React, { Component } from 'react'
 import LearnStep from './LearnStep'
 import Header from './Header'
 import Footer from './Footer'
+import OwnInput from './OwnInput'
 
 export default class App extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
-  }
-
-  componentWillMount() {
-    window.AudioContext = window.AudioContext || window.webkitAudioContext
-
-    let defaultSteps = this.getDefaultSteps()
 
     this.state = {
-      context: new AudioContext(),
       buffers: {
         hour: [],
         minutes: [],
         quarters: [],
       },
-      minuteMode: 'minutes',
-      learnSteps: [
+    }
+  }
+
+  componentWillMount() {
+    this.loadSounds()
+
+    window.AudioContext = window.AudioContext || window.webkitAudioContext
+    this.setState({
+      context: new AudioContext(),
+      minuteMode: localStorage.getItem('minuteMode') || 'minutes',
+      learnSteps: JSON.parse(localStorage.getItem('learnSteps')) || [
         {
           link: "/learn-the-basics",
+          template: "learn-the-basics.js",
           title: "Learn the Basics",
           description: "Learn slocks basics by listening to some times.",
           score: 0,
           progress: 0,
           possibleScore: 10,
-          singleSteps: defaultSteps,
+          singleSteps: this.getDefaultSteps(0),
         },
         {
           link: "/try-it-yourself",
+          template: "try-it-yourself.js",
           title: "Try it Yourself",
           description: "Listen to some times and guess.",
           score: 0,
           progress: 0,
           possibleScore: 10,
-          singleSteps: defaultSteps,
+          singleSteps: this.getDefaultSteps(1),
         },
         {
           link: "/become-an-expert",
+          template: "become-an-expert.js",
           title: "Become an Expert",
           description: "Test your knowledge and become a slock expert!",
           score: 0,
           progress: 0,
           possibleScore: 10,
-          singleSteps: defaultSteps,
+          singleSteps: this.getDefaultSteps(2),
         },
-      ]
-    }
-
-    this.loadSounds()
+      ],
+    })
   }
 
-  getDefaultSteps() {
-    let defaultStep = {
-      finished: false,
-      correct: false,
-      guessed: {
-        hour: null,
-        minute: null,
-      }
-    }
+  componentDidUpdate() {
+    localStorage.setItem('learnSteps', JSON.stringify(this.state.learnSteps))
+    localStorage.setItem('minuteMode', this.state.minuteMode)
+  }
 
+  getDefaultSteps(learnStep) {
     let defaultSteps = []
 
     for(let i = 1; i <= 10; i++) {
-      defaultSteps[i] = defaultStep
+      defaultSteps[i] = {
+        finished: false,
+        correct: false,
+        guessed: {
+          hour: null,
+          minute: null,
+        },
+        time: this.randomTime(),
+      }
     }
 
     return defaultSteps
+  }
+
+  randomTime() {
+    return {
+      hour: Math.floor(Math.random() * 12) + 1,
+      minutes: Math.floor(Math.random() * 59),
+    }
   }
 
   loadSounds() {
@@ -128,6 +142,7 @@ export default class App extends Component {
       finished: true,
       correct: correct,
       guessed: guessed,
+      time: learnSteps[index].singleSteps[step].time
     }
 
     this.setState({
@@ -173,8 +188,13 @@ export default class App extends Component {
 
     return (
       <div>
-        <Header onMinuteModeChange={this.changeMinuteMode.bind(this)} />
+        <Header onMinuteModeChange={this.changeMinuteMode.bind(this)} minuteMode={this.state.minuteMode} />
         <main className="container">
+          <OwnInput
+            context={this.state.context}
+            buffers={this.state.buffers}
+            minuteMode={this.state.minuteMode}
+          />
           <nav id="learn-steps">
             <ul className="learn-steps row">
               {learnSteps}

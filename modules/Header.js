@@ -14,8 +14,8 @@ export default class Header extends Component {
           <p>World's best Sound Clock</p>
         </hgroup>
         <div className="choose-minute-mode">
-          <label htmlFor="choose-minute-mode" className="control-label">App Mode:</label>
-          <select onChange={this.changeMinuteMode.bind(this)} ref="choose-minute-mode" id="choose-minute-mode" name="choose-minute-mode" className="form-control">
+          <label htmlFor="choose-minute-mode" className="control-label">Minute Mode:</label>
+          <select onChange={this.changeMinuteMode.bind(this)} ref="choose-minute-mode" id="choose-minute-mode" name="choose-minute-mode" className="form-control" value={this.props.minuteMode}>
             <option value="minutes">Minutes</option>
             <option value="quarters">Quarters</option>
           </select>

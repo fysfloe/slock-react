@@ -1,20 +1,34 @@
 import React, { Component } from 'react'
-import { withLeadingZero } from './Helpers'
+import { withLeadingZero, getDisplayQuarters } from './Helpers'
 
 export default class ClockImage extends Component {
   render() {
     let hour = this.props.time.hour > 12 ? this.props.time.hour - 12 : this.props.time.hour
-    let renderHour = (this.props.difficulty == 0 || this.props.finished) ? withLeadingZero(hour) : '??'
-    let renderMinutes = (this.props.difficulty == 0 || this.props.finished) ? withLeadingZero(this.props.time.minutes) : '??'
+    let renderHour = (this.props.difficulty == 0 || (this.props.difficulty == 1 && this.props.step > 5) || this.props.finished) ? withLeadingZero(hour) : '??'
+    let renderMinutes
+    if(this.props.difficulty == 0 || (this.props.difficulty == 1 && this.props.step <= 5) || this.props.finished) {
+      if(this.props.minuteMode === 'minutes') {
+        renderMinutes = withLeadingZero(this.props.time.minutes)
+      } else if(this.props.minuteMode === 'quarters') {
+        renderMinutes = getDisplayQuarters(this.props.time.minutes)
+      }
+    } else {
+      renderMinutes = '??'
+    }
 
     let hideClockHands = (this.props.difficulty > 0 && !this.props.finished) ? 'hide-clock-hands' : ''
 
     let col = this.props.difficulty > 0 ? 'col-8' : 'col'
 
+    if(this.props.isDescription) {
+      col = ''
+    }
+
     return (
       <div className={`clock-image ${col}`}>
         <div className="clock-time">
-          <span className="hour">{renderHour}</span>:
+          <span className="hour">{renderHour}</span>
+          :
           <span className="minutes">{renderMinutes}</span>
         </div>
         <svg className={hideClockHands} version="1.1" id="Ebene_1" x="0px" y="0px" width="640px" height="640px" viewBox="0 0 640 640" enableBackground="new 0 0 640 640">
