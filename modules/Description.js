@@ -26,7 +26,12 @@ export default class Description extends Component {
       quartersSound.start(0)
     } else if(soundClass == 'hour') {
       let hourSound = this.props.context.createBufferSource()
-      hourSound.buffer = this.props.buffers.hour[soundNum]
+
+      if(this.props.hourMode === 'major') {
+        hourSound.buffer = this.props.buffers.hour[soundNum]
+      } else {
+        hourSound.buffer = this.props.buffers.chromatic[soundNum]
+      }
       hourSound.connect(this.props.context.destination)
       hourSound.start(0)
     } else if(soundClass == 'minutes') {
@@ -38,7 +43,7 @@ export default class Description extends Component {
   }
 
   learnTheBasics() {
-    let minuteModeDescription
+    let minuteModeDescription, hourModeDescription
 
     if(this.props.minuteMode === 'minutes') {
       minuteModeDescription = (
@@ -85,46 +90,83 @@ export default class Description extends Component {
       )
     }
 
+    if(this.props.hourMode === 'major') {
+      hourModeDescription = (
+        <div className="hour-description major col-6">
+          <h3>Hour (Natural Major Scale)</h3>
+          <p>Now for the hour's part you will always hear two notes. The first one is the reference note, C1.
+            The second one will be in a specific pitch to the first note, which represents a certain interval. Try it yourself to see
+            which interval represents which hour.</p>
+          <div className="form-group">
+            <label htmlFor="select-hour"><span className="sr-only">Select the hour</span></label>
+            <select ref="select_hour" className="form-control" name="select-hour" id="select-hour">
+              <option value="1">1 (Perfect Unison)</option>
+              <option value="2">2 (Major Second)</option>
+              <option value="3">3 (Major Third)</option>
+              <option value="4">4 (Perfect Fourth)</option>
+              <option value="5">5 (Perfect Fifth)</option>
+              <option value="6">6 (Major Sixth)</option>
+              <option value="7">7 (Major Seventh)</option>
+              <option value="8">8 (Perfect Octave)</option>
+            </select>
+            <button onClick={this.playSound.bind(this)} data-sound-class="hour" data-ref="select_hour" id="play-hour-sound" className="btn btn-default">Play Hour Sound</button>
+          </div>
+          <p>But wait, there are still some hours missing! For the hours 9 to 12 we have to do a little trick.
+            Your reference tone will now have an octave down and an octave up playing at the same time. The tone for the interval
+            will be one octave higher than before.</p>
+          <p>Sounds complicated? It isn't! All you have to do, is hear the interval like you
+            did before but now add 7 to it to get the correct hour.
+          </p>
+          <div className="form-group">
+            <label htmlFor="select-higher-hour"><span className="sr-only">Select the hour</span></label>
+            <select ref="select_higher_hour" className="form-control" name="select-higher-hour" id="select-higher-hour">
+              <option value="9">9 (7 + 2 = Major Second)</option>
+              <option value="10">10 (7 + 3 = Major Third)</option>
+              <option value="11">11 (7 + 4 = Perfect Fourth)</option>
+              <option value="12">12 (7 + 5 = Perfect Fifth)</option>
+            </select>
+            <button onClick={this.playSound.bind(this)} data-sound-class="hour" data-ref="select_higher_hour" id="play-higher-hour-sound" className="btn btn-default">Play Hour Sound</button>
+          </div>
+        </div>
+      )
+    } else if(this.props.hourMode === 'chromatic') {
+      hourModeDescription = (
+        <div className="hour-description chromatic col-6">
+          <h3>Hour (Chromatic Scale)</h3>
+          <p>Now for the hour's part you will hear a little snippet of a song you probably know.
+            These songs are typical for a specific interval. Connect the interval and the song to get the
+            correct hour.
+          </p>
+          <div className="form-group">
+            <label htmlFor="select-hour"><span className="sr-only">Select the hour</span></label>
+            <select ref="select_hour" className="form-control" name="select-hour" id="select-hour">
+              <option value="1">1 (Minor Second | Jaws Theme)</option>
+              <option value="2">2 (Major Second | Happy Birthday)</option>
+              <option value="3">3 (Minor Third | Lullaby)</option>
+              <option value="4">4 (Major Third | Oh When The Saints)</option>
+              <option value="5">5 (Perfect Fourth | Harry Potter Hedwig's Theme)</option>
+              <option value="6">6 (Tritone | The Simpsons/Maria)</option>
+              <option value="7">7 (Perfect Fifth | Star Wars Theme)</option>
+              <option value="8">8 (Minor Sixth | The Entertainer)</option>
+              <option value="9">9 (Major Sixth | My Bonny Lies Over The Ocean)</option>
+              <option value="10">10 (Minor Seventh | Star Trek Theme)</option>
+              <option value="11">11 (Major Seventh | Superman Theme)</option>
+              <option value="12">12 (Perfect Octave | Somewhere Over The Rainbow)</option>
+            </select>
+            <button onClick={this.playSound.bind(this)} data-sound-class="hour" data-ref="select_hour" id="play-hour-sound" className="btn btn-default">Play Hour Sound</button>
+          </div>
+          <p>From now on (or after some practice time with slock ;-) you will connect these songs with their
+            characteristic intervals. Cool, isn't it?
+          </p>
+        </div>
+      )
+    }
+
     return (
       <div>
         <div className="row">
           {minuteModeDescription}
-          <div className="hour-description col-6">
-            <h3>Hour</h3>
-            <p>Now for the hour's part you will always hear two notes. The first one is the reference note, C1.
-              The second one will be in a specific pitch to the first note, which represents a certain interval. Try it yourself to see
-              which interval represents which hour.</p>
-            <div className="form-group">
-              <label htmlFor="select-hour"><span className="sr-only">Select the hour</span></label>
-              <select ref="select_hour" className="form-control" name="select-hour" id="select-hour">
-                <option value="1">1 (Perfect Unison)</option>
-                <option value="2">2 (Major Second)</option>
-                <option value="3">3 (Major Third)</option>
-                <option value="4">4 (Perfect Fourth)</option>
-                <option value="5">5 (Perfect Fifth)</option>
-                <option value="6">6 (Major Sixth)</option>
-                <option value="7">7 (Major Seventh)</option>
-                <option value="8">8 (Perfect Octave)</option>
-              </select>
-              <button onClick={this.playSound.bind(this)} data-sound-class="hour" data-ref="select_hour" id="play-hour-sound" className="btn btn-default">Play Hour Sound</button>
-            </div>
-            <p>But wait, there are still some hours missing! For the hours 9 to 12 we have to do a little trick.
-              Your reference tone will now have an octave down and an octave up playing at the same time. The tone for the interval
-              will be one octave higher than before.</p>
-            <p>Sounds complicated? It isn't! All you have to do, is hear the interval like you
-              did before but now add 7 to it to get the correct hour.
-            </p>
-            <div className="form-group">
-              <label htmlFor="select-higher-hour"><span className="sr-only">Select the hour</span></label>
-              <select ref="select_higher_hour" className="form-control" name="select-higher-hour" id="select-higher-hour">
-                <option value="9">9 (7 + 2 = Major Second)</option>
-                <option value="10">10 (7 + 3 = Major Third)</option>
-                <option value="11">11 (7 + 4 = Perfect Fourth)</option>
-                <option value="12">12 (7 + 5 = Perfect Fifth)</option>
-              </select>
-              <button onClick={this.playSound.bind(this)} data-sound-class="hour" data-ref="select_higher_hour" id="play-higher-hour-sound" className="btn btn-default">Play Hour Sound</button>
-            </div>
-          </div>
+          {hourModeDescription}
         </div>
       </div>
     )

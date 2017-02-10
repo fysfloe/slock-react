@@ -25,7 +25,7 @@ export default class OwnInput extends Component {
     let hour = this.state.hourValue
     let minutes = this.state.minutesValue
 
-    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode)
+    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode, this.props.hourMode)
   }
 
   playCurrentTime() {
@@ -46,7 +46,7 @@ export default class OwnInput extends Component {
       minutesValue: withLeadingZero(minutesValue),
     })
 
-    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode)
+    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode, this.props.hourMode)
   }
 
   playRandomSound() {
@@ -65,7 +65,7 @@ export default class OwnInput extends Component {
       minutesValue: withLeadingZero(minutesValue),
     })
 
-    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode)
+    playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode, this.props.hourMode)
   }
 
   render() {

@@ -41,6 +41,7 @@ export default class SingleStep extends Component {
           buffers={this.props.buffers}
           learnStep={this.props.route.learnStep}
           minuteMode={this.props.minuteMode}
+          hourMode={this.props.hourMode}
         />
         <hr />
         <Link className="btn btn-default start-button" to={this.props.route.path.replace('/:step', '') + "/1"}>Go for it →</Link>
@@ -57,6 +58,7 @@ export default class SingleStep extends Component {
           path={this.props.route.path.replace('/:step', '')}
           time={singleStep.time}
           minuteMode={this.props.minuteMode}
+          hourMode={this.props.hourMode}
           context={this.props.context}
           buffers={this.props.buffers}
           difficulty={this.props.route.learnStep}

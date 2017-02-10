@@ -12,6 +12,7 @@ export default class App extends Component {
     this.state = {
       buffers: {
         hour: [],
+        chromatic: [],
         minutes: [],
         quarters: [],
       },
@@ -25,6 +26,7 @@ export default class App extends Component {
     this.setState({
       context: new AudioContext(),
       minuteMode: localStorage.getItem('minuteMode') || 'minutes',
+      hourMode: localStorage.getItem('hourMode') || 'major',
       learnSteps: JSON.parse(localStorage.getItem('learnSteps')) || [
         {
           link: "/learn-the-basics",
@@ -63,6 +65,7 @@ export default class App extends Component {
   componentDidUpdate() {
     localStorage.setItem('learnSteps', JSON.stringify(this.state.learnSteps))
     localStorage.setItem('minuteMode', this.state.minuteMode)
+    localStorage.setItem('hourMode', this.state.hourMode)
   }
 
   getDefaultSteps(learnStep) {
@@ -93,6 +96,10 @@ export default class App extends Component {
   loadSounds() {
     for(let i = 1; i <= 12; i++) {
       this.loadBuffer('audio/' + i + '.wav', i, 'hour');
+    }
+
+    for(let i = 1; i <= 12; i++) {
+      this.loadBuffer('audio/chromatic/' + i + '.wav', i, 'chromatic');
     }
 
     for(let j = 1; j <= 5; j++) {
@@ -133,6 +140,10 @@ export default class App extends Component {
     this.setState({minuteMode: minuteMode})
   }
 
+  changeHourMode(hourMode) {
+    this.setState({hourMode: hourMode})
+  }
+
   guessHandler(correct, index, step, guessed) {
     let learnSteps = this.state.learnSteps
 
@@ -166,6 +177,7 @@ export default class App extends Component {
         context: this.state.context,
         buffers: this.state.buffers,
         minuteMode: this.state.minuteMode,
+        hourMode: this.state.hourMode,
         onGuess: this.guessHandler.bind(this),
         onResetStep: this.resetStepHandler.bind(this),
       })
@@ -188,12 +200,18 @@ export default class App extends Component {
 
     return (
       <div>
-        <Header onMinuteModeChange={this.changeMinuteMode.bind(this)} minuteMode={this.state.minuteMode} />
+        <Header
+          onMinuteModeChange={this.changeMinuteMode.bind(this)}
+          minuteMode={this.state.minuteMode}
+          onHourModeChange={this.changeHourMode.bind(this)}
+          hourMode={this.state.hourMode}
+        />
         <main className="container">
           <OwnInput
             context={this.state.context}
             buffers={this.state.buffers}
             minuteMode={this.state.minuteMode}
+            hourMode={this.state.hourMode}
           />
           <nav id="learn-steps">
             <ul className="learn-steps row">

@@ -31,6 +31,17 @@ header {
       color: #685807;
       width: auto;
       margin-left: 0.5em; }
+  header .choose-hour-mode {
+    position: absolute;
+    right: 1em;
+    top: 4em; }
+    header .choose-hour-mode #choose-hour-mode {
+      background: inherit;
+      border: 1px solid #685807;
+      display: inline-block;
+      color: #685807;
+      width: auto;
+      margin-left: 0.5em; }
 
 h2 {
   font-size: 1.5em; }
@@ -124,6 +135,10 @@ input[disabled] {
     text-align: center; }
     #learn-content .learn-step-description select#select-higher-hour + .btn-default, #learn-content .learn-step-description select#select-hour + .btn-default, #learn-content .learn-step-description input#select-minutes + .btn-default {
       margin-top: -0.1em; }
+  #learn-content .learn-step-description .chromatic select#select-hour {
+    width: 100%;
+    margin-bottom: 1em;
+    text-align: center; }
   #learn-content .learn-step-description .minute-description, #learn-content .learn-step-description .hour-description {
     padding: 1em;
     margin-bottom: 1em; }

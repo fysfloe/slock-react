@@ -89,16 +89,27 @@ export function calcMinutes(minutes, context, buffers) {
   return minutes_to_play;
 }
 
-export function playSound(context, buffers, hour, minutes, minuteMode) {
+export function playSound(context, buffers, hour, minutes, minuteMode, hourMode) {
   if(hour > 12) {
     hour -= 12
   }
 
   let hourSound
+  let waitingTime
+
+  if(hourMode === 'chromatic') {
+    waitingTime = 1200
+  } else {
+    waitingTime = 600
+  }
 
   if(hour) {
     hourSound = context.createBufferSource()
-    hourSound.buffer = buffers.hour[hour]
+    if(hourMode === 'chromatic') {
+      hourSound.buffer = buffers.chromatic[hour]
+    } else {
+      hourSound.buffer = buffers.hour[hour]
+    }
     hourSound.connect(context.destination)
 
     if(minuteMode === 'minutes') {
@@ -123,6 +134,6 @@ export function playSound(context, buffers, hour, minutes, minuteMode) {
       $(minutes_to_play).each(function() {
         this.start(0)
       })
-    }, 600)
+    }, waitingTime)
   }
 }

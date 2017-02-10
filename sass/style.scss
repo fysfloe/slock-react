@@ -46,6 +46,21 @@ header {
       margin-left: 0.5em;
     }
   }
+
+  .choose-hour-mode {
+    position: absolute;
+    right: 1em;
+    top: 4em;
+
+    #choose-hour-mode {
+      background: inherit;
+      border: 1px solid $main-dark;
+      display: inline-block;
+      color: $main-dark;
+      width: auto;
+      margin-left: 0.5em;
+    }
+  }
 }
 
 h2 {
@@ -178,6 +193,12 @@ input[disabled] {
       + .btn-default {
         margin-top: -0.1em;
       }
+    }
+
+    .chromatic select#select-hour {
+      width: 100%;
+      margin-bottom: 1em;
+      text-align: center;
     }
 
     .minute-description, .hour-description {

@@ -28,7 +28,7 @@ export default class Clock extends Component {
     let context = this.props.context
     let buffers = this.props.buffers
 
-    playSound(context, buffers, hour, minutes, this.props.minuteMode)
+    playSound(context, buffers, hour, minutes, this.props.minuteMode, this.props.hourMode)
   }
 
   render() {
