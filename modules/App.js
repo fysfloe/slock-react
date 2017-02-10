@@ -226,7 +226,6 @@ export default class App extends Component {
     this.loadBuffer('audio/minutes/10.wav', 10, 'minutes');
     this.loadBuffer('audio/minutes/20.wav', 20, 'minutes');
     this.loadBuffer('audio/minutes/30.wav', 30, 'minutes');
-    this.loadBuffer('audio/minutes/_minutes.wav', '_minutes', 'minutes');
 
     for(let k = 1; k <= 4; k++) {
       this.loadBuffer('audio/quarters/' + k + '_4.wav', k, 'quarters');
