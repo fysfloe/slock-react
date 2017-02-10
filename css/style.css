@@ -8,6 +8,18 @@ body, html {
 input, select, button {
   font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
 
+@keyframes scaleSpeechSVG {
+  0% {
+    transform: scale3d(1, 1, 1); }
+  100% {
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@-webkit-keyframes scaleSpeechSVG {
+  0% {
+    transform: scale3d(1, 1, 1); }
+  100% {
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
 header {
   padding: 2em; }
   header h1 {
@@ -20,6 +32,40 @@ header {
       cursor: pointer;
       color: inherit;
       text-decoration: none; }
+  header .speech {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 1em; }
+    header .speech .speech-result {
+      color: #af940c;
+      min-width: 10em;
+      padding-left: 0;
+      text-align: left;
+      font-family: "Kaushan Script", cursive; }
+      header .speech .speech-result.final {
+        color: #685807; }
+    header .speech svg {
+      width: 2em;
+      height: 2em;
+      transform: scale3d(1, 1, 1);
+      transition: transform 0.3s ease; }
+      header .speech svg path {
+        fill: #97800a;
+        transition: fill 0.5s ease; }
+      header .speech svg:hover {
+        cursor: pointer; }
+        header .speech svg:hover path {
+          fill: #7f6c09; }
+      header .speech svg.correct-command path {
+        fill: #5cb85c; }
+      header .speech svg.false-command path {
+        fill: #d9534f; }
+      header .speech svg.active {
+        animation: scaleSpeechSVG 0.5s linear infinite alternate;
+        -webkit-animation: scaleSpeechSVG 0.5s linear infinite alternate; }
+        header .speech svg.active path {
+          fill: #685807; }
   header .choose-minute-mode {
     position: absolute;
     right: 1em;

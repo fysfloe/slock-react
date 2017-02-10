@@ -23,8 +23,25 @@ export default class App extends Component {
     this.loadSounds()
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext
+
+    let SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+    let recognition = new SpeechRecognition()
+
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.start()
+
     this.setState({
       context: new AudioContext(),
+      recognition: recognition,
+      speechActivated: false,
+      recognize: false,
+      speechResult: {
+        final: false,
+        result: '',
+      },
       minuteMode: localStorage.getItem('minuteMode') || 'minutes',
       hourMode: localStorage.getItem('hourMode') || 'major',
       learnSteps: JSON.parse(localStorage.getItem('learnSteps')) || [
@@ -62,6 +79,94 @@ export default class App extends Component {
     })
   }
 
+  componentDidMount() {
+    console.log(this.refs);
+    this.initSpeechRecognition()
+  }
+
+  initSpeechRecognition() {
+    let commands = [
+      {
+        commands: [
+          'hey slock',
+          'facelock',
+          'facebook',
+          'ace lock'
+        ]
+      },
+      {
+        function: this.playCurrentTime.bind(this),
+        commands: [
+          'what time is it',
+          'what\'s time is it',
+          'what\'s the time',
+          'tell me the time',
+          'play current time',
+          'playing current time',
+        ]
+      },
+      {
+        function: this.playRandomTime.bind(this),
+        commands: [
+          'play random time',
+          'random time',
+          'playing random time',
+        ]
+      },
+      {
+        function: this.playTime.bind(this),
+        commands: [
+          'play',
+          'play again',
+          'play it again',
+        ]
+      },
+    ]
+
+    let recognition = this.state.recognition
+
+    recognition.onresult = (event) => {
+      let last = event.results.length - 1
+      let transcript = event.results[last][0].transcript
+
+      let speechResult = {
+        final: false,
+        commandCorrect: false,
+        result: '',
+      }
+
+      if(event.results[last].isFinal) {
+        if(this.state.recognize) {
+          console.log(transcript.toLowerCase().trim());
+          for(let command of commands) {
+            if(command.commands.indexOf(transcript.toLowerCase().trim()) !== -1) {
+              command.function()
+              speechResult.commandCorrect = true
+              transcript = transcript.toLowerCase().trim()
+            }
+          }
+          this.setState({
+            recognize: false,
+          })
+          speechResult.final = event.results[last].isFinal
+          speechResult.result = transcript
+        } else {
+          if(commands[0].commands.indexOf(transcript.toLowerCase().trim()) !== -1) {
+            this.toggleSpeech()
+            this.setState({
+              recognize: true,
+            })
+          }
+        }
+      }
+
+      this.setState({
+        speechResult: speechResult
+      })
+      console.log('Confidence: ' + event.results[0][0].confidence)
+    }
+  }
+
   componentDidUpdate() {
     localStorage.setItem('learnSteps', JSON.stringify(this.state.learnSteps))
     localStorage.setItem('minuteMode', this.state.minuteMode)
@@ -84,6 +189,18 @@ export default class App extends Component {
     }
 
     return defaultSteps
+  }
+
+  playCurrentTime() {
+    this.refs.own_input.playCurrentTime()
+  }
+
+  playRandomTime() {
+    this.refs.own_input.playRandomTime()
+  }
+
+  playTime() {
+    this.refs.own_input.playTime()
   }
 
   randomTime() {
@@ -170,6 +287,18 @@ export default class App extends Component {
     this.setState(state)
   }
 
+  toggleSpeech() {
+    this.setState({
+      recognize: !this.state.recognize,
+    })
+  }
+
+  setCurrentTime() {
+    console.log(this.this);
+
+    this.this.refs.own_input.playCurrentTime()
+  }
+
   render() {
     const childrenWithProps = React.Children.map(this.props.children,
       (child) => React.cloneElement(child, {
@@ -205,9 +334,14 @@ export default class App extends Component {
           minuteMode={this.state.minuteMode}
           onHourModeChange={this.changeHourMode.bind(this)}
           hourMode={this.state.hourMode}
+          toggleSpeech={this.toggleSpeech.bind(this)}
+          speechResult={this.state.speechResult}
+          recognize={this.state.recognize}
         />
+        <span ref="speechResult"></span>
         <main className="container">
           <OwnInput
+            ref="own_input"
             context={this.state.context}
             buffers={this.state.buffers}
             minuteMode={this.state.minuteMode}

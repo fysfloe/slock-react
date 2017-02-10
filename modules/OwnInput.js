@@ -21,7 +21,7 @@ export default class OwnInput extends Component {
     })
   }
 
-  playOwnSound() {
+  playTime() {
     let hour = this.state.hourValue
     let minutes = this.state.minutesValue
 
@@ -49,7 +49,7 @@ export default class OwnInput extends Component {
     playSound(this.props.context, this.props.buffers, parseInt(hour), parseInt(minutes), this.props.minuteMode, this.props.hourMode)
   }
 
-  playRandomSound() {
+  playRandomTime() {
     let hour = Math.floor(Math.random() * 12) + 1
     let minutes = Math.floor(Math.random() * 59)
     let minutesValue
@@ -79,8 +79,8 @@ export default class OwnInput extends Component {
           <input onChange={this.inputChanged.bind(this)} ref="own_minutes" name="own-minutes" id="own-minutes" type="number" min="0" max="59" step="1" className="time-input" value={this.state.minutesValue} />
         </div>
         <div className="btn-group">
-          <button id="play-own-time" onClick={this.playOwnSound.bind(this)} className="btn btn-default">Play</button>
-          <button id="play-random-time" onClick={this.playRandomSound.bind(this)} className="btn btn-default">Random</button>
+          <button id="play-own-time" onClick={this.playTime.bind(this)} className="btn btn-default">Play</button>
+          <button id="play-random-time" onClick={this.playRandomTime.bind(this)} className="btn btn-default">Random</button>
         </div>
       </div>
     )
